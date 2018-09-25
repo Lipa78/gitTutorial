@@ -1,0 +1,54 @@
+﻿Установка influxdb
+// добавим установщик wget
+	sudo yum install wget
+// добавим редактор nano
+	sudo yum install nano
+
+// с сайта ставим influxdb
+https://portal.influxdata.com/downloads
+	wget https://dl.influxdata.com/influxdb/releases/influxdb-1.6.0.x86_64.rpm
+	sudo yum localinstall influxdb-1.6.0.x86_64.rpm
+	
+// запускаем базу
+	sudo systemctl start influxdb.service
+// проверяем работает или нет
+	sudo systemctl status influxdb
+
+// запускаем
+	influx
+// создать базу
+		create database influx_base
+// посмотрим списак баз
+		show databases
+// видим список:отать с базой, ее сначала нужно выбрать - для этого выполняем команду:
+		use influx_base
+// просмотр таблиц
+		show measurements
+// выход
+	quit
+
+// конфигурация influx
+	influxd config
+// файл конфигурации  /etc/influxdb/influxdb.conf
+// редактируем файл конфигурации
+	sudo nano influxdb.conf
+
+	
+/*
+	[[graphite]]
+  # Determines whether the graphite endpoint is enabled.
+  enabled = true
+  database = "influx_base"
+  retention-policy = ""
+  bind-address = ":2003"
+  protocol = "tcp"
+  consistency-level = "one"
+  batch-size = 5000
+  batch-pending = 10
+  batch-timeout = "1s"
+  udp-read-buffer = 0
+  separator = "."	
+*/
+
+// перезапустим систему
+	influxd -config /etc/influxdb/influxdb.conf
